@@ -3,27 +3,27 @@
 
 @implementation BatterylevelPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"flutter.io/batterylevel"
-            binaryMessenger:[registrar messenger]];
-  BatterylevelPlugin* instance = [[BatterylevelPlugin alloc] init];
+    FlutterMethodChannel* channel = [FlutterMethodChannel
+                                     methodChannelWithName:@"flutter.io/batterylevel"
+                                     binaryMessenger:[registrar messenger]];
+    BatterylevelPlugin* instance = [[BatterylevelPlugin alloc] init];
     
     DemoViewFactory* factory = [[DemoViewFactory alloc]initWithRegistrar:registrar];
     [registrar registerViewFactory:factory withId:@"flutter.io/batterylevel_view"];
-  [registrar addMethodCallDelegate:instance channel:channel];
+    [registrar addMethodCallDelegate:instance channel:channel];
     
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"getPlatformVersion" isEqualToString:call.method]) {
-    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-  } else if ([@"getBatterylevel" isEqualToString:call.method]) {
-      int batterylevel = (int)[UIDevice currentDevice].batteryLevel;
-      NSString* str = [NSString stringWithFormat:@"%d", batterylevel];
-      result(str);
-  } else {
-    result(FlutterMethodNotImplemented);
-  }
+    if ([@"getPlatformVersion" isEqualToString:call.method]) {
+        result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+    } else if ([@"getBatteryLevel" isEqualToString:call.method]) {
+        int batterylevel = (int)[UIDevice currentDevice].batteryLevel;
+        //      NSString* str = [NSString stringWithFormat:@"%d", batterylevel];
+        result(@(batterylevel));
+    } else {
+        result(FlutterMethodNotImplemented);
+    }
 }
 
 @end

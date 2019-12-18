@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
               title: Text('Batterylevel: $_batterylevel\n'),
             ),
             ListTile(
-              title: Text("below is native: ${_viewTitle}"),
+              title: Text("below is native: $_viewTitle"),
             ),
             _buildNativeView(context),
             ListTile(

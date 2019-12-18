@@ -29,14 +29,11 @@
         /***/
         NSString* channelName = [NSString stringWithFormat:@"flutter.io/batterylevel_view_%lld",viewId];
         //[FlutterStandardMethodCodec sharedInstance]
-        _channel = [[FlutterMethodChannel alloc]initWithName:channelName binaryMessenger:registrar.messenger codec:NULL];
-        
-        
-        
+        _channel = [[FlutterMethodChannel alloc]initWithName:channelName binaryMessenger:registrar.messenger codec:[FlutterStandardMethodCodec sharedInstance]];
         typeof(self) weakSelf = self;
         [_channel setMethodCallHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
             if ([call.method isEqualToString:@"nativeToEvalute"] && weakSelf){
-               // weakSelf->_view.recieveTextField.text = (NSString*)call.arguments;
+                 weakSelf->_view.recieveTextField.text = (NSString*)call.arguments;
             }
         }];
         
@@ -48,13 +45,15 @@
 }
 
 - (void)clcikSendButton:(UIButton*)btn {
-    //_view.sendTextField.text
-
+//    if (_eventSink != NULL) {
+//        _eventSink(_view.sendTextField.text);
+//    }
+    [_channel invokeMethod:@"flutterToEvalute" arguments:_view.sendTextField.text];
 }
 
 - (void)clickSinkEventButton: (UIButton*)btn {
     if (_eventSink != NULL) {
-        _eventSink(@"clicked eventSink button");
+        _eventSink(_view.recieveTextField.text);
     }
 }
 //***
@@ -95,7 +94,7 @@
         
         _recieveButton = [[UIButton alloc]init];
         [_recieveButton setTitle:@"eventSinkButton" forState:UIControlStateNormal];
-         [_recieveButton setBackgroundColor:[UIColor blueColor]];
+        [_recieveButton setBackgroundColor:[UIColor blueColor]];
         
         [self addSubview:_sendTextField];
         [self addSubview:_sendButton];
@@ -110,30 +109,30 @@
         _sendTextField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         
         NSArray<NSLayoutConstraint*>* constraints = @[
-         [_sendTextField.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
-         [_sendTextField.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
-         [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
-         [_sendTextField.heightAnchor constraintEqualToConstant:30.0],
-         
-         [_sendButton.topAnchor constraintEqualToAnchor:_sendTextField.bottomAnchor constant:10.0],
-         [_sendButton.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
-         [_sendButton.heightAnchor constraintEqualToConstant:30.0],
-         [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
-         
-          [_recieveTextField.topAnchor constraintEqualToAnchor:_sendButton.bottomAnchor constant:10.0],
-         [_recieveTextField.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
-         [_recieveTextField.heightAnchor constraintEqualToConstant:30.0],
-           [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
-         
-         [_recieveButton.topAnchor constraintEqualToAnchor:_recieveTextField.bottomAnchor constant:10.0],
-         [_recieveButton.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
-         [_recieveButton.heightAnchor constraintEqualToConstant:30.0],
-         ];
+            [_sendTextField.topAnchor constraintEqualToAnchor:self.topAnchor constant:10.0],
+            [_sendTextField.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
+            [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
+            [_sendTextField.heightAnchor constraintEqualToConstant:30.0],
+            
+            [_sendButton.topAnchor constraintEqualToAnchor:_sendTextField.bottomAnchor constant:10.0],
+            [_sendButton.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
+            [_sendButton.heightAnchor constraintEqualToConstant:30.0],
+            [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
+            
+            [_recieveTextField.topAnchor constraintEqualToAnchor:_sendButton.bottomAnchor constant:10.0],
+            [_recieveTextField.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
+            [_recieveTextField.heightAnchor constraintEqualToConstant:30.0],
+            [_sendTextField.widthAnchor constraintEqualToAnchor:self.widthAnchor constant:-20.0],
+            
+            [_recieveButton.topAnchor constraintEqualToAnchor:_recieveTextField.bottomAnchor constant:10.0],
+            [_recieveButton.leftAnchor constraintEqualToAnchor:self.leftAnchor constant:10.0],
+            [_recieveButton.heightAnchor constraintEqualToConstant:30.0],
+        ];
         [NSLayoutConstraint activateConstraints:constraints];
     }
-        
-   return self;
- 
+    
+    return self;
+    
 }
 
 
